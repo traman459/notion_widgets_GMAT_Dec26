@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GMAT Countdown</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Lato:wght@400&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: transparent; }
+  body {
+    display: flex;
+    justify-content: center;
+    padding: 12px;
+    font-family: 'Lato', 'Helvetica Neue', Arial, sans-serif;
+  }
+  .timer {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+    max-width: 640px;
+  }
+  .tile {
+    flex: 1 1 0;
+    min-width: 0;
+    aspect-ratio: 1 / 1.05;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #13265a;
+    overflow: hidden;
+  }
+  .days    { background: #f0303f; }
+  .hours   { background: #ededed; }
+  .minutes { background: #2870c2; }
+  .seconds { background: #f0a500; }
+
+  .num {
+    font-family: 'Montserrat', 'Arial Black', sans-serif;
+    font-weight: 900;
+    font-size: clamp(26px, 8vw, 54px);
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+  }
+  .label {
+    margin-top: 14px;
+    font-size: clamp(9px, 2.2vw, 14px);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    padding-left: 0.3em; /* balances trailing letter-spacing */
+  }
+  @media (max-width: 380px) { .timer { gap: 8px; } }
+</style>
+</head>
+<body>
+  <div class="timer" role="timer" aria-label="Countdown to GMAT exam on 27 December 2026">
+    <div class="tile days">   <div class="num" id="d">0</div><div class="label">Days</div></div>
+    <div class="tile hours">  <div class="num" id="h">00</div><div class="label">Hours</div></div>
+    <div class="tile minutes"><div class="num" id="m">00</div><div class="label">Minutes</div></div>
+    <div class="tile seconds"><div class="num" id="s">00</div><div class="label">Seconds</div></div>
+  </div>
+
+<script>
+  // Exam date: 27 Dec 2026, 00:00 India Standard Time (UTC+5:30).
+  // To change the start time, edit the time part, e.g. 2026-12-27T09:30:00+05:30
+  const EXAM = new Date('2026-12-27T00:00:00+05:30').getTime();
+
+  const el = id => document.getElementById(id);
+  const pad = n => String(n).padStart(2, '0');
+
+  function tick() {
+    let diff = Math.max(0, EXAM - Date.now());
+    const days = Math.floor(diff / 86400000);
+    const hrs  = Math.floor(diff % 86400000 / 3600000);
+    const mins = Math.floor(diff % 3600000 / 60000);
+    const secs = Math.floor(diff % 60000 / 1000);
+    el('d').textContent = days;
+    el('h').textContent = pad(hrs);
+    el('m').textContent = pad(mins);
+    el('s').textContent = pad(secs);
+  }
+  tick();
+  setInterval(tick, 1000);
+</script>
+</body>
+</html>
